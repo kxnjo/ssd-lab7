@@ -3,10 +3,17 @@ import globals from "globals";
 import pluginReact from "eslint-plugin-react";
 import { defineConfig } from "eslint/config";
 
+// security eslint
+import pluginSecurity from "eslint-plugin-security"
 
 export default defineConfig([
-  { files: ["**/*.{js,mjs,cjs,jsx}"], 
-    plugins: { js, react: pluginReact }, 
+  { 
+    files: ["**/*.{js,mjs,cjs,jsx}"], 
+    plugins: { 
+      js, 
+      react: pluginReact,
+      security: pluginSecurity
+    }, 
     extends: ["js/recommended"],
     languageOptions: {
       globals: {
@@ -20,6 +27,11 @@ export default defineConfig([
         version: "detect"  // ✅ This fixes the React warning
       }
     },
+    rules: {
+      ...js.configs.recommended.rules,
+      ...pluginReact.configs.flat.recommended.rules,
+      "security/detect-eval-with-expression": "error"
+    }
   },
   { files: ["**/*.{js,mjs,cjs,jsx}"], languageOptions: { globals: {...globals.browser, ...globals.node} } },
   pluginReact.configs.flat.recommended,
